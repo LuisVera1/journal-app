@@ -12,8 +12,12 @@ import {
 	Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
+import { useSelector } from 'react-redux';
 
 export const SideBar = ({ drawerWidth }) => {
+	const {displayName} = useSelector((state) => state.auth);
+
+
 	return (
 		<Box component="nav" sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}>
 			<Drawer
@@ -23,16 +27,10 @@ export const SideBar = ({ drawerWidth }) => {
 					display: { xs: 'block' },
 					'& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
 				}}
-				// variant='permanent' // temporary
-				// open
-				// sx={{
-				//     display: { xs: 'block' },
-				//     '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth }
-				// }}
 			>
 				<Toolbar>
 					<Typography variant="h6" noWrap component="div">
-						Luis Vera
+						{displayName ? displayName : ''}
 					</Typography>
 				</Toolbar>
 				<Divider />

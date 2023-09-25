@@ -1,37 +1,86 @@
-import { Google } from '@mui/icons-material';
-import { Button, Grid, Link, TextField, Typography } from '@mui/material';
+import { useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
+import { Google } from '@mui/icons-material';
+import { Alert, Button, Grid, Link, TextField, Typography } from '@mui/material';
 import { AuthLayout } from '../layout/AuthLayout';
+import { useForm } from '../../hooks';
+import { StartLoginWithEmailandPassword, startGoogleSignIn } from '../../store/auth/thunks';
 
 export const LoginPage = () => {
+	const { status, errorMessage } = useSelector((state) => state.auth);
+
+	const dispatch = useDispatch();
+	const { email, password, onInputChange, onResetForm } = useForm({
+		email: '',
+		password: '',
+	});
+
+	const isAuthenticating = useMemo(() => status === 'checking', [status]);
+
+	const onSubmit = (event) => {
+		event.preventDefault();
+		dispatch(StartLoginWithEmailandPassword(email, password));
+	};
+
+	const onGoogleSignIn = () => {
+		dispatch(startGoogleSignIn());
+	};
+
 	return (
 		<AuthLayout title="Login">
-			<form>
+			<form onSubmit={onSubmit} className="animate__animated animate__fadeIn animate__faster">
 				<Grid container>
-
 					<Grid item xs={12} sx={{ mt: 2 }}>
-						<TextField label="correo" type="email" placeholder="correo@mail.com" fullWidth />
+						<TextField
+							label="correo"
+							type="email"
+							placeholder="correo@mail.com"
+							name="email"
+							autoComplete="on"
+							value={email}
+							onChange={onInputChange}
+							fullWidth
+						/>
 					</Grid>
 
 					<Grid item xs={12} sx={{ mt: 2 }}>
-						<TextField label="contraseña" type="password" placeholder="contraseña" fullWidth />
+						<TextField
+							label="contraseña"
+							type="password"
+							placeholder="contraseña"
+							name="password"
+							autoComplete="on"
+							value={password}
+							onChange={onInputChange}
+							fullWidth
+						/>
 					</Grid>
 
 					<Grid container spacing={2} sx={{ mb: 2, mt: 1 }}>
+						<Grid item xs={12} display={!!errorMessage ? '' : 'none'}>
+							<Alert severity="error">{errorMessage}</Alert>
+						</Grid>
+					</Grid>
 
+					<Grid container spacing={2} sx={{ mb: 2, mt: 1 }}>
 						<Grid item xs={12} sm={6}>
-							<Button variant="contained" fullWidth>
+							<Button disabled={isAuthenticating} type="submit" variant="contained" fullWidth>
 								<Typography>Login</Typography>
 							</Button>
 						</Grid>
 
 						<Grid item xs={12} sm={6}>
-							<Button variant="contained" fullWidth>
+							<Button
+								disabled={isAuthenticating}
+								variant="contained"
+								onClick={onGoogleSignIn}
+								fullWidth
+							>
 								<Google />
 								<Typography sx={{ ml: 1 }}>Google</Typography>
 							</Button>
 						</Grid>
-
 					</Grid>
 
 					<Grid container direction="row" justifyContent="end">
@@ -39,7 +88,6 @@ export const LoginPage = () => {
 							Crear una cuenta
 						</Link>
 					</Grid>
-					
 				</Grid>
 			</form>
 		</AuthLayout>
