@@ -40,7 +40,7 @@ export const NoteView = () => {
 					variant="filled"
 					fullWidth
 					multiline
-					placeholder="¿Qué sucedio hoy?"
+					placeholder="¿Qué sucedió hoy?"
 					minRows={5}
 				/>
 
