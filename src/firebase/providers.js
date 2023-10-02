@@ -36,7 +36,8 @@ export const singWithGoogle = async () => {
 export const registerNewUser = async ({ email, password, displayName }) => {
 	try {
 		const resp = await createUserWithEmailAndPassword(firebaseAuth, email, password);
-		const { uid, displayName, photoURL } = resp.user;
+		
+		const { uid, photoURL } = resp.user;
 
 		//update profile
 		await updateProfile(firebaseAuth.currentUser, { displayName });
