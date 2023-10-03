@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { loadNotes } from '../../helpers/loadNotes';
 
 export const journalSlice = createSlice({
 	name: 'journal',
@@ -26,7 +27,9 @@ export const journalSlice = createSlice({
 		setActiveNote: (state, action) => {
 			state.active = action.payload;
 		},
-		setNotes: (state, action) => {},
+		setNotes: (state, action) => {
+			state.notes = action.payload;
+		},
 		setSaving: (state, action) => {},
 		updateNote: (state, action) => {},
 		deleteNoteById: (state, action) => {},
