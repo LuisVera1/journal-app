@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { loadNotes } from '../../helpers/loadNotes';
 
 export const journalSlice = createSlice({
 	name: 'journal',

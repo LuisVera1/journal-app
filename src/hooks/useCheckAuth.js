@@ -7,6 +7,7 @@ import { startLoadingNotes } from '../store/journal/thunks';
 
 export const useCheckauth = () => {
 	const { status } = useSelector((state) => state.auth);
+
 	const dispatch = useDispatch();
 
 	useEffect(() => {

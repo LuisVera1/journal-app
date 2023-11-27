@@ -10,6 +10,8 @@ export const loadNotes = async (uid = '') => {
 	// console.log(docs._docs[0].data()) //Note
 	// console.log(docs._docs[0].id) //id
 
+	const temp = Math.random();
+
 	const notes = docs._docs.map((note) => ({
 		id: note.id,
 		...note.data(),
