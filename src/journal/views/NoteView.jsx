@@ -1,19 +1,24 @@
-import { Button } from '@mui/base';
-import { SaveOutlined } from '@mui/icons-material';
-import { Grid, TextField, Typography } from '@mui/material';
-import { ImageGallery } from '../components/ImageGallery';
 import { useDispatch, useSelector } from 'react-redux';
-import { useForm } from '../../hooks/useform';
 import { useEffect, useMemo } from 'react';
+
+import { ImageGallery } from '../components/ImageGallery';
 import { setActiveNote } from '../../store/journal/journalSlice.js';
-import { startSavingNote } from '../../store/journal/thunks.js';
+
+import { useForm } from '../../hooks/useform';
+import { startSavingNote, startUploadingFiles } from '../../store/journal/thunks.js';
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.css';
+
+import { Button } from '@mui/base';
+import { SaveOutlined, UploadFileOutlined } from '@mui/icons-material';
+import { Grid, IconButton, TextField, Typography } from '@mui/material';
+
 
 export const NoteView = () => {
 	const { active: activeNote, messageSaved, isSaving } = useSelector((state) => state.journal);
 	const { formState, body, title, date, onInputChange } = useForm(activeNote);
 	const dispatch = useDispatch();
+
 
 	useEffect(() => {
 		dispatch(setActiveNote(formState));
@@ -39,6 +44,13 @@ export const NoteView = () => {
 		dispatch(startSavingNote());
 	};
 
+	const onFileInputChange = ({ target }) => {
+		if (target.files == 0) return;
+
+		dispatch(startUploadingFiles(target.files));
+
+	}
+
 	return (
 		<Grid
 			container
@@ -54,6 +66,25 @@ export const NoteView = () => {
 			</Grid>
 
 			<Grid item>
+
+				<input
+					type="file"
+					multiple
+					id="uploadbtn"
+					onChange={onFileInputChange}
+					style={{ display: 'none' }}
+				/>
+
+				<IconButton
+					color="primary"
+					disabled={isSaving}
+				>
+					<label htmlFor="uploadbtn">
+
+						<UploadFileOutlined />
+					</label>
+				</IconButton>
+
 				<Button color="primary" onClick={onSaveNote} disabled={isSaving}>
 					<SaveOutlined sx={{ fontSize: 30, mr: 0 }} />
 					<Typography sx={{ fontSize: 10, ml: 1, mr: 1 }}>Guardar</Typography>
@@ -85,7 +116,7 @@ export const NoteView = () => {
 					onChange={onInputChange}
 				/>
 
-				<ImageGallery />
+				<ImageGallery images={activeNote.imageUrls} />
 			</Grid>
 		</Grid>
 	);
