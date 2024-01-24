@@ -5,12 +5,12 @@ import { ImageGallery } from '../components/ImageGallery';
 import { setActiveNote } from '../../store/journal/journalSlice.js';
 
 import { useForm } from '../../hooks/useform';
-import { startSavingNote, startUploadingFiles } from '../../store/journal/thunks.js';
+import { startDeletingNote, startSavingNote, startUploadingFiles } from '../../store/journal/thunks.js';
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.css';
 
 import { Button } from '@mui/base';
-import { SaveOutlined, UploadFileOutlined } from '@mui/icons-material';
+import { DeleteOutline, SaveOutlined, UploadFileOutlined } from '@mui/icons-material';
 import { Grid, IconButton, TextField, Typography } from '@mui/material';
 
 
@@ -18,7 +18,6 @@ export const NoteView = () => {
 	const { active: activeNote, messageSaved, isSaving } = useSelector((state) => state.journal);
 	const { formState, body, title, date, onInputChange } = useForm(activeNote);
 	const dispatch = useDispatch();
-
 
 	useEffect(() => {
 		dispatch(setActiveNote(formState));
@@ -48,7 +47,10 @@ export const NoteView = () => {
 		if (target.files == 0) return;
 
 		dispatch(startUploadingFiles(target.files));
+	}
 
+	const onDelete = () => {
+		dispatch(startDeletingNote());
 	}
 
 	return (
@@ -115,6 +117,17 @@ export const NoteView = () => {
 					value={body}
 					onChange={onInputChange}
 				/>
+
+				<Grid container justifyContent='end'>
+					<Button
+						onClick={onDelete}
+						sx={{ mt: 2 }}
+						color="error"
+					>
+						<DeleteOutline />
+						Borrar
+					</Button>
+				</Grid>
 
 				<ImageGallery images={activeNote.imageUrls} />
 			</Grid>
