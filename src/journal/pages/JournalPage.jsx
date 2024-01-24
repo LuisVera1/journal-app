@@ -19,9 +19,6 @@ export const JournalPage = () => {
 
 			{active && <NoteView />}
 
-			{/* <NothingSelectedView /> */}
-			{/* <NoteView /> */}
-
 			<IconButton
 				size="large"
 				onClick={onClickNewNote}
